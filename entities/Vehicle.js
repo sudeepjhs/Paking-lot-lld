@@ -12,13 +12,10 @@ class Vehicle {
   /**
    * @param {string} license_plate - The license plate number of the vehicle.
    * @param {keyof VehicleType} vehicle_type - The type of the vehicle
-   * @param {Date} entry_time - The time when the vehicle entered the parking lot.
    **/
-  constructor(license_plate, vehicle_type, entry_time) {
+  constructor(license_plate, vehicle_type) {
     this.license_plate = license_plate;
     this.vehicle_type = vehicle_type;
-    this.entry_time = entry_time;
-    this.exit_time = null;
   }
 
   /**
@@ -34,31 +31,7 @@ class Vehicle {
    * @returns {valueOf<VehicleType>} - The type of the vehicle.
    **/
   get_type() {
-    return this.type;
-  }
-
-  /**
-   * @description This method gets the entry time of the vehicle.
-   * @returns {Date} - The entry time of the vehicle.
-   **/
-  get_entry_time() {
-    return this.entry_time;
-  }
-
-  /**
-   * @description This method sets the exit time of the vehicle.
-   * @param {Date} exit_time - The exit time of the vehicle.
-   **/
-  set_exit_time(exit_time) {
-    this.exit_time = exit_time;
-  }
-
-  /**
-   * @description This method gets the exit time of the vehicle.
-   * @returns {Date} - The exit time of the vehicle.
-   **/
-  get_exit_time() {
-    return this.exit_time;
+    return this.vehicle_type;
   }
 }
 
