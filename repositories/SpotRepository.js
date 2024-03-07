@@ -1,7 +1,7 @@
-import Spot from "../entities/Spot";
-import ParkingLevel from "../entities/ParkingLevel";
-import PaikingRow from "../entities/ParkingRow";
-import Vehicle, { VehicleType } from "../entities/Vehicle";
+const { Spot } = require("../entities/Spot");
+const ParkingLevel = require("../entities/ParkingLevel");
+const PaikingRow = require("../entities/ParkingRow");
+const { VehicleType, Vehicle } = require("../entities/Vehicle");
 
 class SpotRepository {
   constructor() {
@@ -72,4 +72,4 @@ class SpotRepository {
   }
 }
 
-export default SpotRepository;
+module.exports = SpotRepository;

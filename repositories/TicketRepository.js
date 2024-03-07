@@ -1,4 +1,4 @@
-import Ticket from "../entities/Ticket";
+const Ticket = require("../entities/Ticket");
 
 /**
  * @class TicketRepository
@@ -36,7 +36,7 @@ class TicketRepository {
   findTicketById(ticketId) {
     return this._tickets[ticketId];
   }
- 
+
   /**
    * @description This method gets all the tickets.
    * @returns {Array<Ticket>} - All the tickets.
@@ -102,7 +102,6 @@ class TicketRepository {
   setTicketPrice(ticket, price) {
     ticket.set_price(price);
   }
-
 }
 
-export default TicketRepository;
+module.exports = TicketRepository;

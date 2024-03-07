@@ -1,4 +1,4 @@
-import Spot from "./Spot";
+const {Spot} = require("./Spot");
 
 /**
  * @class ParkingLevel
@@ -35,4 +35,4 @@ class ParkingLevel {
   }
 }
 
-export default ParkingLevel;
+module.exports = ParkingLevel;

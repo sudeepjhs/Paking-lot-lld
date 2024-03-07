@@ -1,4 +1,4 @@
-import { VehicleType } from "../entities/Vehicle";
+const { VehicleType } = require("../entities/Vehicle");
 
 class PricingStrategy {
   #pricing = {
@@ -11,7 +11,7 @@ class PricingStrategy {
   MOTORCYCLE:number,
   BUS:number}} spotPricing - The pricing of the spot.
     **/
-  constructor(spotPricing = null) {
+  constructor(spotPricing = {}) {
     this.#pricing = spotPricing;
   }
   /**
@@ -21,6 +21,7 @@ class PricingStrategy {
    * @returns {number} - The total price of the parking.
    **/
   calculateCharge(vehicle_type, duration) {
+    if (!this.#pricing[vehicle_type]) return null;
     const rate = this.#pricing[vehicle_type];
     if (!rate) throw new Error("pricing not found for " + vehicle_type);
     return rate * duration;
@@ -63,4 +64,4 @@ class PricingStrategy {
   }
 }
 
-export default PricingStrategy;
+module.exports = PricingStrategy;

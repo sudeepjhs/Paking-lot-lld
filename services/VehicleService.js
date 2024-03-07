@@ -1,5 +1,5 @@
-import Vehicle, { VehicleType } from "../entities/Vehicle";
-import VehicleRepository from "../repositories/VehicleRepository";
+const { VehicleType, Vehicle } = require("../entities/Vehicle");
+const VehicleRepository = require("../repositories/VehicleRepository");
 
 /**
  * @class VehicleService
@@ -57,6 +57,10 @@ class VehicleService {
   getAllVehicles() {
     return this.vehicleRepository.findAllVehicles();
   }
+
+  getVehicleTypes() {
+    return Object.values(VehicleType);
+  }
 }
 
-export default VehicleService;
+module.exports = VehicleService;

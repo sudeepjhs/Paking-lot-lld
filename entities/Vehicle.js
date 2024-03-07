@@ -1,7 +1,7 @@
-export const VehicleType = Object.freeze({
-  CAR,
-  MOTORCYCLE,
-  BUS,
+const VehicleType = Object.freeze({
+  CAR: "CAR",
+  MOTORCYCLE: "MOTORCYCLE",
+  BUS: "BUS",
 });
 
 /**
@@ -35,4 +35,4 @@ class Vehicle {
   }
 }
 
-export default Vehicle;
+module.exports = { Vehicle, VehicleType };

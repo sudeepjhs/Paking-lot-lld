@@ -1,11 +1,11 @@
-import ParkingLevel from "./ParkingLevel";
-import ParkingRow from "./ParkingRow";
-import Vehicle from "./Vehicle";
+const ParkingLevel = require("./ParkingLevel");
+const ParkingRow = require("./ParkingRow");
+const {Vehicle} = require("./Vehicle");
 
-export const SpotSize = Object.freeze({
-  COMPACT,
-  MOTORCYCLE,
-  LARGE,
+const SpotSize = Object.freeze({
+  COMPACT: "COMPACT",
+  MOTORCYCLE: "MOTORCYCLE",
+  LARGE: "LARGE",
 });
 
 /**
@@ -81,4 +81,4 @@ class Spot {
   }
 }
 
-export default Spot;
+module.exports = {Spot,SpotSize};

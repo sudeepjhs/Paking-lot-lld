@@ -1,4 +1,4 @@
-import Vehicle, { VehicleType } from "../entities/Vehicle";
+const { VehicleType, Vehicle } = require("../entities/Vehicle");
 
 /**
  * @class VehicleRepository
@@ -36,7 +36,8 @@ class VehicleRepository {
    * @returns {Vehicle} - The vehicle.
    **/
   findVehicleByLicensePlate(license_plate) {
-    if (!license_plate || typeof license_plate !== "string") throw new Error("license_plate is required");
+    if (!license_plate || typeof license_plate !== "string")
+      throw new Error("license_plate is required");
     return Object.values(this._vehicles).find(
       (v) => v.license_plate === license_plate,
     );
@@ -93,4 +94,4 @@ class VehicleRepository {
   }
 }
 
-export default VehicleRepository;
+module.exports = VehicleRepository;

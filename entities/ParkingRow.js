@@ -20,4 +20,4 @@ class ParkingRow {
   }
 }
 
-export default ParkingRow;
+module.exports = ParkingRow;

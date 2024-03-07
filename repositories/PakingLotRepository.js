@@ -1,6 +1,6 @@
-import ParkingLevel from "../entities/ParkingLevel";
-import ParkingRow from "../entities/ParkingRow";
-import SpotRepository from "./SpotRepository";
+const ParkingLevel = require("../entities/ParkingLevel");
+const ParkingRow = require("../entities/ParkingRow");
+const SpotRepository = require("./SpotRepository");
 
 /**
  * @class ParkingLotRepository
@@ -79,4 +79,4 @@ class PakingLotRepository {
   }
 }
 
-export default PakingLotRepository;
+module.exports = PakingLotRepository;

@@ -1,8 +1,8 @@
-import Spot, { SpotType } from "../entities/Spot";
-import SpotRepository from "../repositories/SpotRepository";
-import ParkingLevel from "../entities/ParkingLevel";
-import ParkingRow from "../entities/ParkingRow";
-import { VehicleType } from "../entities/Vehicle";
+const { SpotType,Spot } = require("../entities/Spot");
+const SpotRepository = require("../repositories/SpotRepository");
+const ParkingLevel = require("../entities/ParkingLevel");
+const ParkingRow = require("../entities/ParkingRow");
+const { VehicleType } = require("../entities/Vehicle");
 
 /**
  * @class SpotService
@@ -126,4 +126,4 @@ class SpotService {
   }
 }
 
-export default SpotService;
+module.exports = SpotService;

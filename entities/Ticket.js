@@ -1,4 +1,4 @@
-import Spot from "./Spot";
+const {Spot} = require("./Spot");
 
 /**
  * @class Ticket
@@ -80,4 +80,4 @@ class Ticket {
   }
 }
 
-export default Ticket;
+module.exports = Ticket;

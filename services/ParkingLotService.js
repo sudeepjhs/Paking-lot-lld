@@ -1,11 +1,11 @@
-import ParkingLotRepository from "../repositories/PakingLotRepository";
-import TicketService from "./TicketService";
-import VehicleService from "./VehicleService";
-import { SpotSize } from "../entities/Spot";
-import { VehicleType } from "../entities/Vehicle";
-import Ticket from "../entities/Ticket";
-import PricingService from "./PricingService";
-import SpotService from "./SpotService";
+const ParkingLotRepository = require("../repositories/PakingLotRepository");
+const TicketService = require("./TicketService");
+const VehicleService = require("./VehicleService");
+const { SpotSize } = require("../entities/Spot");
+const { VehicleType } = require("../entities/Vehicle");
+const Ticket = require("../entities/Ticket");
+const PricingService = require("./PricingService");
+const SpotService = require("./SpotService");
 
 /**
  * @class ParkingLotService
@@ -202,4 +202,4 @@ class ParkingLotService {
   }
 }
 
-export default ParkingLotService;
+module.exports = ParkingLotService;

@@ -1,7 +1,7 @@
-import Ticket from "../entities/Ticket";
-import TicketRepository from "../repositories/TicketRepository";
-import Spot from "../entities/Spot";
-import Vehicle from "../entities/Vehicle";
+const Ticket = require("../entities/Ticket");
+const TicketRepository = require("../repositories/TicketRepository");
+const { Spot } = require("../entities/Spot");
+const { Vehicle } = require("../entities/Vehicle");
 
 /**
  * @class TicketService
@@ -114,4 +114,4 @@ class TicketService {
   }
 }
 
-export default TicketService;
+module.exports = TicketService;
