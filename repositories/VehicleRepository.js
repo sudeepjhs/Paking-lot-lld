@@ -11,14 +11,11 @@ class VehicleRepository {
   }
 
   /**
-   * @param {string} license_plate - The license plate number of the vehicle.
-   * @param {keyof VehicleType} vehicle_type - The type of the vehicle.
+   * @param {Vehicle} vehicle - The vehicle to be added.
    * @returns {Vehicle} - The created vehicle.
    **/
-  addVehicle(license_plate, vehicle_type) {
-    if (!Object.values(VehicleType).includes(vehicle_type))
-      throw new Error("vehicle_type is invalid");
-    const v = new Vehicle(license_plate, vehicle_type);
+  addVehicle(vehicle) {
+    const v = new Vehicle(vehicle.get_license_plate(), vehicle.get_type());
     this._vehicles[this._autoIncrement] = v;
     this._autoIncrement++;
     return v;
@@ -39,7 +36,7 @@ class VehicleRepository {
    * @returns {Vehicle} - The vehicle.
    **/
   findVehicleByLicensePlate(license_plate) {
-    if (!license_plate) throw new Error("license_plate is required");
+    if (!license_plate || typeof license_plate !== "string") throw new Error("license_plate is required");
     return Object.values(this._vehicles).find(
       (v) => v.license_plate === license_plate,
     );

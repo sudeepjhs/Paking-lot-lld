@@ -1,33 +1,39 @@
 import ParkingLotRepository from "../repositories/PakingLotRepository";
-import TicketRepository from "../repositories/TicketRepository";
-import VehicleRepository from "../repositories/VehicleRepository";
-import SpotRepository from "../repositories/SpotRepository";
+import TicketService from "./TicketService";
+import VehicleService from "./VehicleService";
 import { SpotSize } from "../entities/Spot";
 import { VehicleType } from "../entities/Vehicle";
 import Ticket from "../entities/Ticket";
-import PricingStrategy from "./PricingStrategy";
+import PricingService from "./PricingService";
+import SpotService from "./SpotService";
 
 /**
- * @class ParkingLot
- * @description This class represents a parking lot.
+ * @class ParkingLotService
+ * @description This class represents a service for parking lots.
  **/
-class ParkingLot extends PricingStrategy {
+class ParkingLotService {
   /**
-   * @param {number} total_levels - The total number of levels in the parking lot.
-   * @param {number} car_price - The price of a car vehicle type.
-   * @param {number} motorcycle_price - The price of a motorcycle vehicle type.
-   * @param {number} bus_price - The price of a bus vehicle type.
+   * @param {SpotService} spotService - The service for spots.
+   * @param {TicketService} ticketService - The service for tickets.
+   * @param {VehicleService} vehicleService - The service for vehicles.
+   * @param {PricingService} pricingService - The service for pricing.
    **/
-  constructor(car_price, motorcycle_price, bus_price) {
-    this.spotRepository = new SpotRepository();
-    this.pakingLotRepository = new ParkingLotRepository(this.spotRepository);
-    this.ticketRepository = new TicketRepository();
-    this.vehicleRepository = new VehicleRepository();
-    super({
-      CAR: car_price,
-      MOTORCYCLE: motorcycle_price,
-      BUS: bus_price,
-    });
+  constructor(spotService, ticketService, vehicleService, pricingService) {
+    if (!spotService || typeof spotService !== "object")
+      throw new Error("spotService is required");
+    if (!ticketService || typeof ticketService !== "object")
+      throw new Error("ticketService is required");
+    if (!vehicleService || typeof vehicleService !== "object")
+      throw new Error("vehicleService is required");
+    if (!pricingService || typeof pricingService !== "object")
+      throw new Error("pricingService is required");
+    this.spotService = spotService;
+    this.ticketService = ticketService;
+    this.vehicleService = vehicleService;
+    this.pricingService = pricingService;
+    this.pakingLotRepository = new ParkingLotRepository(
+      this.spotService.spotRepository,
+    );
   }
 
   /**
@@ -91,35 +97,35 @@ class ParkingLot extends PricingStrategy {
       throw new Error("vehicle_license_plate is required");
     if (!entryTimestamp) throw new Error("entryTimestamp is required");
     if (!vehicle_type) throw new Error("vehicle_type is required");
-    const vehicle = this.vehicleRepository.findVehicleByLicensePlate(
+    const vehicle = this.vehicleService.getVehicleByLicensePlate(
       vehicle_license_plate,
     );
     if (!vehicle) {
       if (!Object.values(VehicleType).includes(vehicle_type))
         throw new Error("vehicle_type is invalid");
-      vehicle = this.vehicleRepository.addVehicle(
+      vehicle = this.vehicleService.addVehicle(
         vehicle_license_plate,
         vehicle_type,
       );
     }
-    const spot = this.spotRepository.findSpotByVehicle(vehicle);
+    const spot = this.spotService.findSpotByVehicle(vehicle);
     if (spot) throw new Error("Vehical is already parked");
     const Alllevel = this.pakingLotRepository.findAllPakingLevel();
     if (!Alllevel) throw new Error("level is not found");
     for (const level of Alllevel) {
-      const spots = this.spotRepository.findAllSpotByAvailability(
+      const spots = this.spotService.findAllSpotByAvailability(
         true,
         level.get_rows(),
       );
       if (spots.length > 0) {
-        let vehicleSpot = this.spotRepository.findSpotsByVehicleType(
+        let vehicleSpot = this.spotService.findSpotsByVehicleType(
           vehicle_type,
           spots,
         );
         if (vehicleSpot.length > 0) {
           const selectedSpot = vehicleSpot[0];
-          this.spotRepository.park(selectedSpot, vehicle);
-          const ticket = this.ticketRepository.addTicket(
+          this.spotService.park(selectedSpot, vehicle);
+          const ticket = this.ticketService.createTicket(
             vehicle,
             entryTimestamp,
             selectedSpot,
@@ -129,15 +135,15 @@ class ParkingLot extends PricingStrategy {
       }
     }
     for (const level of Alllevel) {
-      const spots = this.spotRepository.findAllSpotByAvailability(
+      const spots = this.spotService.findAllSpotByAvailability(
         true,
         level.get_rows(),
       );
       if (spots.length > 0) {
         for (const spot in spots) {
-          if (this.spotRepository.canVehicleFit(vehicle, spot)) {
-            this.spotRepository.park(spot, vehicle);
-            const ticket = this.ticketRepository.addTicket(
+          if (this.spotService.canVehicleFit(vehicle, spot)) {
+            this.spotService.park(spot, vehicle);
+            const ticket = this.ticketService.createTicket(
               vehicle,
               entryTimestamp,
               spot,
@@ -161,21 +167,22 @@ class ParkingLot extends PricingStrategy {
     if (!vehicle_license_plate)
       throw new Error("vehicle_license_plate is required");
     if (!exitTimestamp) throw new Error("exitTimestamp is required");
-    const ticket = this.ticketRepository.findEntryTicketByVehicleLicensePlate(
-      vehicle_license_plate,
-    );
-    if (!ticket) throw new Error("ticket is not found");
-    const vehicle = this.vehicleRepository.findVehicleByLicensePlate(
+    const vehicle = this.vehicleService.getVehicleByLicensePlate(
       vehicle_license_plate,
     );
     if (!vehicle) throw new Error("vehicle is not found");
-    const spot = this.spotRepository.findSpotByVehicle(vehicle);
+    const ticket = this.ticketService.findTicketByVehicleForExit(vehicle);
+    if (!ticket) throw new Error("ticket is not found");
+    const spot = this.spotService.findSpotByVehicle(vehicle);
     if (!spot) throw new Error("vehicle is not parked");
-    this.ticketRepository.setExitTimestamp(ticket, exitTimestamp);
-    const duration = this.ticketRepository.calculateDuration(ticket);
-    const charge = super.calculateCharge(spot.get_vehicle(), duration);
-    this.ticketRepository.setTicketPrice(ticket, charge);
-    this.spotRepository.unpark(spot);
+    this.ticketService.addExitTime(ticket, exitTimestamp);
+    const duration = this.ticketService.calculateDuration(ticket);
+    const charge = this.pricingService.calculateCharge(
+      spot.get_vehicle(),
+      duration,
+    );
+    this.ticketService.addPrice(ticket, charge);
+    this.spotService.unpark(spot);
     return charge;
   }
 
@@ -191,8 +198,8 @@ class ParkingLot extends PricingStrategy {
       throw new Error("newPrice should be greater than 0");
     if (!Object.values(SpotSize).includes(spot_size))
       throw new Error("Invalid spot size");
-    super.setSpotPrice(spot_size, newPrice);
+    this.pricingService.setSpotPrice(spot_size, newPrice);
   }
 }
 
-export default ParkingLot;
+export default ParkingLotService;

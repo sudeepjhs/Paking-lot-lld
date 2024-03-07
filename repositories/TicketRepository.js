@@ -36,6 +36,7 @@ class TicketRepository {
   findTicketById(ticketId) {
     return this._tickets[ticketId];
   }
+ 
   /**
    * @description This method gets all the tickets.
    * @returns {Array<Ticket>} - All the tickets.
@@ -102,17 +103,6 @@ class TicketRepository {
     ticket.set_price(price);
   }
 
-  /**
-   * @description This method calculate the duration of parking from the ticket entry and exit date.
-   * @param {Ticket} ticket - The ticket.
-   * @returns {number} - The duration of parking in hours.
-   **/
-  calculateDuration(ticket) {
-    const entryTimestamp = ticket.get_entryTimestamp();
-    const exitTimestamp = ticket.get_exitTimestamp();
-    const duration = (exitTimestamp - entryTimestamp) / (1000 * 60 * 60); // Convert to hours;
-    return duration;
-  }
 }
 
 export default TicketRepository;
